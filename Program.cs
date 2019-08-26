@@ -32,8 +32,7 @@ namespace Ex_DateTimeZoneHandling
         static void ExpDeserialize()
         {
             var json = @"{
-                ""Date"": ""2019-12-31T15:00:00.000Z"",
-                ""DateWithOffset"": ""2019-12-31T15:00:00.000Z""
+                ""Date"": ""2019-12-31T15:00:00.000Z""
             }";
 
             Console.WriteLine("\nDeserialization result:");
@@ -52,11 +51,10 @@ namespace Ex_DateTimeZoneHandling
     class MyModel
     {
         public DateTime Date { get; set; }
-        public DateTimeOffset DateWithOffset { get; set; }
 
         public override string ToString()
         {
-            return $"Date={Date} Date.Kind={Date.Kind} DateWithOffset={DateWithOffset}";
+            return $"Date={Date} Date.Kind={Date.Kind}";
         }
     }
 }
