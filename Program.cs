@@ -27,6 +27,7 @@ namespace Ex_DateTimeZoneHandling
         static void Main(string[] args)
         {
             ExpDeserialize();
+            ExpSerialize();
         }
 
         static void ExpDeserialize()
@@ -46,6 +47,49 @@ namespace Ex_DateTimeZoneHandling
         {
             return JsonConvert.DeserializeObject<MyModel>(json, settings);
         }
+
+        static void ExpSerialize()
+        {
+            // Copied from https://www.newtonsoft.com/json/help/html/SerializeDateTimeZoneHandling.htm
+            Flight flight = new Flight
+            {
+                Date = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Unspecified),
+                DateUtc = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Utc),
+                DateLocal = new DateTime(2013, 1, 21, 0, 0, 0, DateTimeKind.Local),
+            };
+
+            string jsonWithRoundtripTimeZone = JsonConvert.SerializeObject(flight, Formatting.Indented, new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind
+            });
+
+            Console.WriteLine("\nRoundtripKind:");
+            Console.WriteLine(jsonWithRoundtripTimeZone);
+
+            string jsonWithLocalTimeZone = JsonConvert.SerializeObject(flight, Formatting.Indented, new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Local
+            });
+
+            Console.WriteLine("\nLocal:");
+            Console.WriteLine(jsonWithLocalTimeZone);
+
+            string jsonWithUtcTimeZone = JsonConvert.SerializeObject(flight, Formatting.Indented, new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc
+            });
+
+            Console.WriteLine("\nUtc:");
+            Console.WriteLine(jsonWithUtcTimeZone);
+
+            string jsonWithUnspecifiedTimeZone = JsonConvert.SerializeObject(flight, Formatting.Indented, new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Unspecified
+            });
+
+            Console.WriteLine("\nUnspecified:");
+            Console.WriteLine(jsonWithUnspecifiedTimeZone);
+        }
     }
 
     class MyModel
@@ -56,5 +100,12 @@ namespace Ex_DateTimeZoneHandling
         {
             return $"Date={Date} Date.Kind={Date.Kind}";
         }
+    }
+
+    class Flight
+    {
+        public DateTime Date { get; set; }
+        public DateTime DateUtc { get; set; }
+        public DateTime DateLocal { get; set; }
     }
 }
